@@ -1,5 +1,5 @@
 const appInfo = () => {
-  return 'Backend for task-manager';
+  return `${Date.now()}: Backend for task-manager`;
 };
 
 export default { appInfo };

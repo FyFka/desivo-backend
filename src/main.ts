@@ -2,12 +2,12 @@ import fastify, { FastifyInstance } from 'fastify';
 import { configuration } from './config/configuration';
 import appController from './modules/app/app.controller';
 import mongoose from 'mongoose';
-import userController from './modules/user/user.controller';
+import authController from './modules/auth/auth.controller';
 
 const app: FastifyInstance = fastify();
 
 app.register(appController);
-app.register(userController);
+app.register(authController);
 
 const bootstrap = async () => {
   try {

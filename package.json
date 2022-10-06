@@ -7,10 +7,12 @@
     "bcryptjs": "^2.4.3",
     "dotenv": "^16.0.3",
     "fastify": "^4.7.0",
+    "jsonwebtoken": "^8.5.1",
     "mongoose": "^6.6.4"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.2",
+    "@types/jsonwebtoken": "^8.5.9",
     "@types/node": "^18.8.2",
     "@typescript-eslint/eslint-plugin": "^5.39.0",
     "@typescript-eslint/parser": "^5.39.0",

@@ -1,9 +1,11 @@
 import { Schema } from 'mongoose';
+import { configuration } from '../config/configuration';
 
 export const userSchema = new Schema({
   name: String,
   secondName: String,
-  username: String,
+  username: { type: String, unique: true },
   password: String,
-  avatar: String,
+  avatar: { type: String, default: configuration.default.avatar },
+  roles: [{ type: String, ref: 'Role' }],
 });
