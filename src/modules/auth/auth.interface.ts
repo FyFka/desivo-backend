@@ -3,7 +3,7 @@ export interface IAuthBody {
   password: string;
 }
 
-export interface IRegisterBody extends IAuthBody {
+export interface ISignupBody extends IAuthBody {
   name: string;
   secondName: string;
 }

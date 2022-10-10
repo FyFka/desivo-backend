@@ -1,4 +1,4 @@
-import { sign } from 'jsonwebtoken';
+import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { configuration } from '../../config/configuration';
 
 const generateToken = (userId: string, roles: string[]) => {
@@ -10,4 +10,13 @@ const generateToken = (userId: string, roles: string[]) => {
   return token;
 };
 
-export default { generateToken };
+const parseToken = (token: string) => {
+  try {
+    const { roles, id } = verify(token, configuration.jwt.secret) as JwtPayload;
+    return { roles, id };
+  } catch (err) {
+    return null;
+  }
+};
+
+export default { generateToken, parseToken };

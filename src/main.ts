@@ -3,11 +3,15 @@ import { configuration } from './config/configuration';
 import appController from './modules/app/app.controller';
 import mongoose from 'mongoose';
 import authController from './modules/auth/auth.controller';
+import cors from '@fastify/cors';
+import projectController from './modules/project/project.controller';
 
 const app: FastifyInstance = fastify();
 
 app.register(appController);
 app.register(authController);
+app.register(projectController);
+app.register(cors, { origin: '*' });
 
 const bootstrap = async () => {
   try {

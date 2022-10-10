@@ -1,29 +1,22 @@
-const auth = {
-  schema: {
-    body: {
-      type: 'object',
-      required: ['username', 'password'],
-      properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
-      },
-    },
-  },
-};
+import { validatorFactory } from '../../utils/bodyValidator';
 
-const register = {
-  schema: {
-    body: {
-      type: 'object',
-      required: ['username', 'password', 'name', 'secondName'],
-      properties: {
-        username: { type: 'string' },
-        password: { type: 'string' },
-        name: { type: 'string' },
-        secondName: { type: 'string' },
-      },
-    },
-  },
-};
+const auth = validatorFactory(['username', 'password'], {
+  username: { type: 'string' },
+  password: { type: 'string' },
+});
 
-export default { auth, register };
+const signup = validatorFactory(
+  ['username', 'password', 'name', 'secondName'],
+  {
+    username: { type: 'string' },
+    password: { type: 'string' },
+    name: { type: 'string' },
+    secondName: { type: 'string' },
+  },
+);
+
+const token = validatorFactory(['token'], {
+  token: { type: 'string' },
+});
+
+export default { auth, signup, token };
