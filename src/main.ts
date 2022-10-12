@@ -5,17 +5,29 @@ import mongoose from 'mongoose';
 import authController from './modules/auth/auth.controller';
 import cors from '@fastify/cors';
 import projectController from './modules/project/project.controller';
+import middiePlugin from '@fastify/middie';
+import authMiddleware from './middlewares/auth.middleware';
 
 const app: FastifyInstance = fastify();
 
-app.register(appController);
-app.register(authController);
-app.register(projectController);
-app.register(cors, { origin: '*' });
+const registerModules = () => {
+  app.register(authController);
+  app.register(appController);
+  app.register(projectController);
+};
+
+const registerMiddlewares = () => {
+  app.register(cors, { origin: '*' });
+  app.use('/project/create', authMiddleware);
+};
 
 const bootstrap = async () => {
   try {
     await mongoose.connect(configuration.database.uri);
+    await app.register(middiePlugin, { hook: 'preHandler' });
+    registerMiddlewares();
+    registerModules();
+
     app.listen({ port: configuration.setup.port }, (err) => {
       if (err) throw err;
       const info = app.server.address();
@@ -28,4 +40,5 @@ const bootstrap = async () => {
     process.exit(1);
   }
 };
+
 bootstrap();

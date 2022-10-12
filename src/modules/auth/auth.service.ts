@@ -10,7 +10,7 @@ const generateToken = (userId: string, roles: string[]) => {
   return token;
 };
 
-const parseToken = (token: string) => {
+const parseToken = (token: string): { roles: string[]; id: string } => {
   try {
     const { roles, id } = verify(token, configuration.jwt.secret) as JwtPayload;
     return { roles, id };
