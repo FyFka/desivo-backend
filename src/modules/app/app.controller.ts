@@ -1,8 +1,8 @@
 import { FastifyInstance } from 'fastify';
 import appService from './app.service';
 
-export default async (appInst: FastifyInstance) => {
-  appInst.get('/', async () => {
+export default async (app: FastifyInstance) => {
+  app.get('/', async () => {
     return appService.appInfo();
   });
 };

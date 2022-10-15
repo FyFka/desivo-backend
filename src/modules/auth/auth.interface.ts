@@ -7,3 +7,8 @@ export interface ISignupBody extends IAuthBody {
   name: string;
   secondName: string;
 }
+
+export interface ITokenableUser {
+  id: string;
+  roles: string[];
+}

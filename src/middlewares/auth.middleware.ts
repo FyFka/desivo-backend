@@ -3,8 +3,7 @@ import { IncomingMessage, ServerResponse } from 'http';
 import authService from '../modules/auth/auth.service';
 import { middlewareResponse } from '../utils/middlewareResponse';
 
-export type ServerRequest = IncomingMessage &
-  IncomingMessageExtended & { user?: { id: string; roles: string[] } };
+export type ServerRequest = IncomingMessage & IncomingMessageExtended;
 
 export default (req: ServerRequest, res: ServerResponse, next: () => void) => {
   try {

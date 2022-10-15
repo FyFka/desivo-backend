@@ -4,7 +4,7 @@ import { hashSync } from 'bcryptjs';
 import roleService from '../role/role.service';
 import { configuration } from '../../config/configuration';
 
-const createUser = async (userDto: Omit<IUser, 'avatar'>) => {
+const createUser = async (userDto: Omit<IUser, 'avatar' | '_id'>) => {
   const { password, ...rest } = userDto;
   const userRole = await roleService.findOneByName(configuration.default.role);
   if (!userRole) throw new Error("Role doesn't exists");

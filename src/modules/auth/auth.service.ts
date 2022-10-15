@@ -1,5 +1,6 @@
 import { JwtPayload, sign, verify } from 'jsonwebtoken';
 import { configuration } from '../../config/configuration';
+import { ITokenableUser } from './auth.interface';
 
 const generateToken = (userId: string, roles: string[]) => {
   const payload = { id: userId, roles };
@@ -10,7 +11,7 @@ const generateToken = (userId: string, roles: string[]) => {
   return token;
 };
 
-const parseToken = (token: string): { roles: string[]; id: string } => {
+const parseToken = (token: string): ITokenableUser => {
   try {
     const { roles, id } = verify(token, configuration.jwt.secret) as JwtPayload;
     return { roles, id };

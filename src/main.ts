@@ -7,6 +7,7 @@ import cors from '@fastify/cors';
 import projectController from './modules/project/project.controller';
 import middiePlugin from '@fastify/middie';
 import authMiddleware from './middlewares/auth.middleware';
+import socketDecorator from 'fastify-socket.io';
 
 const app: FastifyInstance = fastify();
 
@@ -16,9 +17,10 @@ const registerModules = () => {
   app.register(projectController);
 };
 
-const registerMiddlewares = () => {
+const registerMiddlewares = async () => {
   app.register(cors, { origin: '*' });
-  app.use('/project/create', authMiddleware);
+  app.register(socketDecorator, { cors: { origin: '*' } });
+  app.use('/project/', authMiddleware);
 };
 
 const bootstrap = async () => {
@@ -28,7 +30,15 @@ const bootstrap = async () => {
     registerMiddlewares();
     registerModules();
 
-    app.listen({ port: configuration.setup.port }, (err) => {
+    app.ready((err) => {
+      if (err) throw err;
+
+      app.io.on('connect', (socket) =>
+        console.info('Socket connected!', socket.id),
+      );
+    });
+
+    app.listen({ port: configuration.setup.port, host: '127.0.0.1' }, (err) => {
       if (err) throw err;
       const info = app.server.address();
       console.log(
