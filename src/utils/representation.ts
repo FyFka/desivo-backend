@@ -1,3 +1,4 @@
+import { IMessage } from '../modules/discussion/discussion.interface';
 import { IProject } from '../modules/project/project.interface';
 import { IUser } from '../modules/user/user.interface';
 
@@ -13,4 +14,13 @@ export const toProjectClient = (projectPresentable: IProject) => {
 
 export const toProjectListClient = (projectsPresentable: IProject[]) => {
   return projectsPresentable.map((project) => toProjectClient(project));
+};
+
+export const toMessageClient = (messagePresentable: IMessage) => {
+  const { _id, message, project, timestamp, user } = messagePresentable;
+  return { id: _id, message, project, timestamp, user: toUserClient(user) };
+};
+
+export const toMessagesHistoryClient = (messagesPresentable: IMessage[]) => {
+  return messagesPresentable.map((message) => toMessageClient(message));
 };

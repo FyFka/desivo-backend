@@ -6,6 +6,7 @@ import { compareSync } from 'bcryptjs';
 import authService from './auth.service';
 import { toUserClient } from '../../utils/representation';
 import { IUser } from '../user/user.interface';
+import { connections } from '../../constants';
 
 export default async (app: FastifyInstance) => {
   app.post('/auth', validate.auth, async (req) => {
@@ -52,5 +53,22 @@ export default async (app: FastifyInstance) => {
     } catch (err) {
       return { message: err.message };
     }
+  });
+
+  app.event('connection:register', (token, socket) => {
+    const user = authService.parseToken(token as string);
+    if (user) {
+      connections[socket.id] = user;
+      return ['connection:status', { value: true }];
+    }
+
+    return ['connection:status', { value: false }];
+  });
+
+  app.event('disconnect', (_, socket) => {
+    if (connections[socket.id]) {
+      delete connections[socket.id];
+    }
+    return ['disconnect:status'];
   });
 };
