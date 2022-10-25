@@ -8,7 +8,7 @@ const createUser = async (userDto: Omit<IUser, 'avatar' | '_id'>) => {
   const { password, ...rest } = userDto;
   const userRole = await roleService.findRoleByName(configuration.default.role);
   if (!userRole) throw new Error("Role doesn't exists");
-  const foundUser = await findOneByKey('username', userDto.username);
+  const foundUser = await findUserByKey('username', userDto.username);
   if (foundUser) throw new Error('User is already exists');
   const user = new User({
     password: hashSync(password),
@@ -19,9 +19,9 @@ const createUser = async (userDto: Omit<IUser, 'avatar' | '_id'>) => {
   return user;
 };
 
-const findOneByKey = async (key: string, value: string) => {
+const findUserByKey = async (key: string, value: string) => {
   const user = await User.findOne({ [key]: value }).exec();
   return user;
 };
 
-export default { createUser, findOneByKey };
+export default { createUser, findUserByKey };

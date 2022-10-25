@@ -1,14 +1,22 @@
+import { connections } from '../constants';
 import { Socket } from 'socket.io';
-import { SocketEvent } from '../shared/EventResponse';
+import { SocketEventCallback } from '../shared/EventResponse';
 
-export const handledEvents: { evt: string; callback: SocketEvent }[] = [];
+export const handledEvents: { evt: string; callback: SocketEventCallback }[] =
+  [];
 
 export const registerEvents = (socket: Socket) => {
   handledEvents.forEach((hv) => {
     socket.on(hv.evt, async (args) => {
-      const eventResult = await hv.callback(args, socket);
-      if (eventResult) {
-        const [evt, res] = eventResult;
+      if (!connections[socket.id] && hv.evt !== 'connection:register') {
+        socket.emit('connection:error', {
+          message: 'connection is not registered',
+        });
+        return;
+      }
+      const eventResponse = await hv.callback(args, socket);
+      if (eventResponse) {
+        const [evt, res] = eventResponse;
         socket.emit(evt, res);
       }
     });

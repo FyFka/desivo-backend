@@ -10,7 +10,7 @@ import authMiddleware from './middlewares/auth.middleware';
 import socketDecorator from 'fastify-socket.io';
 import discussionController from './modules/discussion/discussion.controller';
 import { registerEvents, handledEvents } from './utils/socket';
-import { SocketEvent } from './shared/EventResponse';
+import { SocketEventCallback } from './shared/EventResponse';
 import tasksController from './modules/tasks/tasks.controller';
 
 const app: FastifyInstance = fastify();
@@ -30,7 +30,7 @@ const registerMiddlewares = async () => {
 };
 
 const registerSocketEvents = () => {
-  app.decorate('event', (evt: string, callback: SocketEvent) => {
+  app.decorate('event', (evt: string, callback: SocketEventCallback) => {
     handledEvents.push({ evt, callback });
   });
 

@@ -6,7 +6,8 @@ interface IEventBody {
 }
 
 type EventResponse = [string, IEventBody] | [string];
-export type SocketEvent = (
+
+export type SocketEventCallback = (
   data: unknown,
   socket: Socket,
-) => Promise<EventResponse> | EventResponse | void;
+) => Promise<EventResponse> | EventResponse | Promise<void> | void;

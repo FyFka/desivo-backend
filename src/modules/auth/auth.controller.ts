@@ -12,7 +12,7 @@ export default async (app: FastifyInstance) => {
   app.post('/auth', validate.auth, async (req) => {
     try {
       const { username, password } = req.body as IAuthDTO;
-      const user = await userService.findOneByKey('username', username);
+      const user = await userService.findUserByKey('username', username);
       if (user && compareSync(password, user.password)) {
         const token = authService.generateToken(
           user._id.toString(),
@@ -45,7 +45,7 @@ export default async (app: FastifyInstance) => {
       const { token } = req.body as IValidateDTO;
       const parsedToken = authService.parseToken(token);
       if (parsedToken) {
-        const user = await userService.findOneByKey('_id', parsedToken.id);
+        const user = await userService.findUserByKey('_id', parsedToken.id);
         return { value: toUserClient(user as IUser) };
       }
       return { message: 'incorrect token' };

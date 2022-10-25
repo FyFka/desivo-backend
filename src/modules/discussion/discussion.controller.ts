@@ -14,26 +14,17 @@ import {
 import discussionService from './discussion.service';
 
 export default async (app: FastifyInstance) => {
-  app.event('discussion:subscribe', async (subscribeDTO, socket) => {
-    if (!connections[socket.id]) {
-      return ['notReg', { message: 'not in connections' }];
-    }
+  app.event('discussion:subscribe', (subscribeDTO, socket) => {
     const { projectId } = subscribeDTO as ISubscribeDTO;
     discussionService.subscribeToDiscussion(socket, projectId);
   });
 
-  app.event('discussion:unsubscribe', async (unsubscribeDTO, socket) => {
-    if (!connections[socket.id]) {
-      return ['notReg', { message: 'not in connections' }];
-    }
+  app.event('discussion:unsubscribe', (unsubscribeDTO, socket) => {
     const { projectId } = unsubscribeDTO as IUnsubscribeDTO;
     discussionService.unsubscribeFromDiscussion(socket, projectId);
   });
 
   app.event('discussion:new-message', async (messageDTO, socket) => {
-    if (!connections[socket.id]) {
-      return ['notReg', { message: 'not in connections' }];
-    }
     const { message, projectId } = messageDTO as IMessageDTO;
     const messageRes = await discussionService.createMessage(
       message,
@@ -47,10 +38,7 @@ export default async (app: FastifyInstance) => {
     });
   });
 
-  app.event('discussion:get-history', async (paginationDTO, socket) => {
-    if (!connections[socket.id]) {
-      return ['notReg', { message: 'not in connections' }];
-    }
+  app.event('discussion:get-history', async (paginationDTO) => {
     const { projectId, skip } = paginationDTO as IPaginationDTO;
     const messagesList = await discussionService.getMessages(projectId, skip);
     if (messagesList.length < 1 && skip !== 0) {
