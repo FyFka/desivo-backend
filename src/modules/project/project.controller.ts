@@ -4,14 +4,18 @@ import {
   toProjectClient,
   toProjectListClient,
 } from '../../utils/representation';
-import { ICreateProjectBody, IProject } from './project.interface';
+import {
+  ICreateProjectDTO,
+  IJoinProjectDTO,
+  IProject,
+} from './project.interface';
 import projectService from './project.service';
 import projectValidate from './project.validate';
 
 export default async (app: FastifyInstance) => {
   app.post('/project/create', projectValidate.createProject, async (req) => {
     try {
-      const { image, name } = req.body as ICreateProjectBody;
+      const { image, name } = req.body as ICreateProjectDTO;
       const { user } = req.raw;
       let projectUrl: undefined | string;
       if (image) {
@@ -46,7 +50,7 @@ export default async (app: FastifyInstance) => {
 
   app.post('/project/join', async (req) => {
     try {
-      const { projectId } = req.body as { projectId: string };
+      const { projectId } = req.body as IJoinProjectDTO;
       const { user } = req.raw;
       const joinedProject = await projectService.joinById(projectId, user.id);
       if (joinedProject) {

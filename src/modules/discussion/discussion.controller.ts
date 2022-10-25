@@ -5,27 +5,28 @@ import {
   toMessagesHistoryClient,
 } from '../../utils/representation';
 import {
-  IDiscussionSubscribe,
   IMessage,
-  IMessageBody,
-  IMessagesList,
+  IMessageDTO,
+  IPaginationDTO,
+  ISubscribeDTO,
+  IUnsubscribeDTO,
 } from './discussion.interface';
 import discussionService from './discussion.service';
 
 export default async (app: FastifyInstance) => {
-  app.event('discussion:subscribe', async (discussionSubDTO, socket) => {
+  app.event('discussion:subscribe', async (subscribeDTO, socket) => {
     if (!connections[socket.id]) {
       return ['notReg', { message: 'not in connections' }];
     }
-    const { projectId } = discussionSubDTO as IDiscussionSubscribe;
+    const { projectId } = subscribeDTO as ISubscribeDTO;
     discussionService.subscribeToDiscussion(socket, projectId);
   });
 
-  app.event('discussion:unsubscribe', async (discussionunSubDTO, socket) => {
+  app.event('discussion:unsubscribe', async (unsubscribeDTO, socket) => {
     if (!connections[socket.id]) {
       return ['notReg', { message: 'not in connections' }];
     }
-    const { projectId } = discussionunSubDTO as IDiscussionSubscribe;
+    const { projectId } = unsubscribeDTO as IUnsubscribeDTO;
     discussionService.unsubscribeFromDiscussion(socket, projectId);
   });
 
@@ -33,7 +34,7 @@ export default async (app: FastifyInstance) => {
     if (!connections[socket.id]) {
       return ['notReg', { message: 'not in connections' }];
     }
-    const { message, projectId } = messageDTO as IMessageBody;
+    const { message, projectId } = messageDTO as IMessageDTO;
     const messageRes = await discussionService.createMessage(
       message,
       Date.now(),
@@ -46,15 +47,20 @@ export default async (app: FastifyInstance) => {
     });
   });
 
-  app.event('discussion:get-history', async (messagesListDTO, socket) => {
+  app.event('discussion:get-history', async (paginationDTO, socket) => {
     if (!connections[socket.id]) {
       return ['notReg', { message: 'not in connections' }];
     }
-    const { projectId } = messagesListDTO as IMessagesList;
-    const messagesList = await discussionService.getMessages(projectId);
+    const { projectId, skip } = paginationDTO as IPaginationDTO;
+    const messagesList = await discussionService.getMessages(projectId, skip);
+    if (messagesList.length < 1 && skip !== 0) {
+      return ['discussion:messages-history-end', { value: true }];
+    }
     return [
       'discussion:messages-history',
-      { value: toMessagesHistoryClient(messagesList as IMessage[]) },
+      {
+        value: toMessagesHistoryClient(messagesList.reverse() as IMessage[]),
+      },
     ];
   });
 };

@@ -11,6 +11,7 @@ import socketDecorator from 'fastify-socket.io';
 import discussionController from './modules/discussion/discussion.controller';
 import { registerEvents, handledEvents } from './utils/socket';
 import { SocketEvent } from './shared/EventResponse';
+import tasksController from './modules/tasks/tasks.controller';
 
 const app: FastifyInstance = fastify();
 
@@ -19,6 +20,7 @@ const registerModules = () => {
   app.register(appController);
   app.register(projectController);
   app.register(discussionController);
+  app.register(tasksController);
 };
 
 const registerMiddlewares = async () => {

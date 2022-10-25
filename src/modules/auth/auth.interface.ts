@@ -1,9 +1,13 @@
-export interface IAuthBody {
+export interface IAuthDTO {
   username: string;
   password: string;
 }
 
-export interface ISignupBody extends IAuthBody {
+export interface IValidateDTO {
+  token: string;
+}
+
+export interface ISignupDTO extends IAuthDTO {
   name: string;
   secondName: string;
 }

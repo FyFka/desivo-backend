@@ -1,6 +1,6 @@
 import { Role } from '../../models';
 
-const findOneByName = async (name: string) => {
+const findRoleByName = async (name: string) => {
   const role = await Role.findOne({ value: name });
   return role;
 };
@@ -11,4 +11,4 @@ const create = async (name: string) => {
   return role;
 };
 
-export default { findOneByName, create };
+export default { findRoleByName, create };

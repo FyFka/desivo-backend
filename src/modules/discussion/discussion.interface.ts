@@ -1,17 +1,22 @@
 import { Types } from 'mongoose';
 import { IUser } from '../user/user.interface';
 
-export interface IMessageBody {
+export interface ISubscribeDTO {
+  projectId: string;
+}
+
+export interface IUnsubscribeDTO {
+  projectId: string;
+}
+
+export interface IMessageDTO {
   message: string;
   projectId: string;
 }
 
-export interface IMessagesList {
+export interface IPaginationDTO {
   projectId: string;
-}
-
-export interface IDiscussionSubscribe {
-  projectId: string;
+  skip: number;
 }
 
 export interface IMessage {

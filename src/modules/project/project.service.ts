@@ -1,7 +1,15 @@
 import { Project } from '../../models';
+import tasksService from '../tasks/tasks.service';
 
 const createProject = async (name: string, userId: string, image?: string) => {
-  const project = new Project({ name, image, owner: userId, users: [userId] });
+  const column = await tasksService.createColumn('Example column');
+  const project = new Project({
+    name,
+    image,
+    owner: userId,
+    users: [userId],
+    columns: [column._id],
+  });
   await project.save();
   return project;
 };

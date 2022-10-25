@@ -1,8 +1,12 @@
 import { Types } from 'mongoose';
 
-export interface ICreateProjectBody {
+export interface ICreateProjectDTO {
   image?: string;
   name: string;
+}
+
+export interface IJoinProjectDTO {
+  projectId: string;
 }
 
 export interface IProject {

@@ -14,10 +14,14 @@ const createMessage = async (
   return messageWithUser;
 };
 
-const getMessages = async (projectId: string) => {
-  const messages = await Message.find({ project: projectId }).populate<{
-    user: IUser;
-  }>('user');
+const getMessages = async (projectId: string, skip: number) => {
+  const messages = await Message.find({ project: projectId })
+    .sort({ timestamp: 'desc' })
+    .limit(25)
+    .skip(skip)
+    .populate<{
+      user: IUser;
+    }>('user');
   return messages;
 };
 

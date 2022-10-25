@@ -6,4 +6,5 @@ export const projectSchema = new Schema({
   image: { type: String, default: configuration.default.project },
   owner: { type: String, ref: 'User' },
   users: [{ type: String, ref: 'User' }],
+  columns: [{ type: String, ref: 'Column' }],
 });

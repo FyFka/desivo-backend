@@ -6,7 +6,7 @@ import { configuration } from '../../config/configuration';
 
 const createUser = async (userDto: Omit<IUser, 'avatar' | '_id'>) => {
   const { password, ...rest } = userDto;
-  const userRole = await roleService.findOneByName(configuration.default.role);
+  const userRole = await roleService.findRoleByName(configuration.default.role);
   if (!userRole) throw new Error("Role doesn't exists");
   const foundUser = await findOneByKey('username', userDto.username);
   if (foundUser) throw new Error('User is already exists');
