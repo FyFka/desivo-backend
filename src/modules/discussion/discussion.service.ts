@@ -4,10 +4,10 @@ import { IUser } from '../user/user.interface';
 
 const createMessage = async (
   message: string,
-  timestamp: number,
   project: string,
   user: string,
 ) => {
+  const timestamp = Date.now();
   const newMessage = new Message({ message, project, timestamp, user });
   await newMessage.save();
   const messageWithUser = await newMessage.populate<{ user: IUser }>('user');

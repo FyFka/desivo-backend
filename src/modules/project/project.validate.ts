@@ -1,4 +1,4 @@
-import { validatorFactory } from '../../utils/bodyValidator';
+import { validatorFactory } from '../../utils/requestValidator';
 
 const createProject = validatorFactory(['name'], {
   name: { type: 'string' },

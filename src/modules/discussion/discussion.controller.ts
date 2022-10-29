@@ -1,5 +1,5 @@
 import { FastifyInstance } from 'fastify';
-import { connections } from '../../constants';
+import { CONNECTED_USERS } from '../../shared/constants';
 import {
   toMessageClient,
   toMessagesHistoryClient,
@@ -28,9 +28,8 @@ export default async (app: FastifyInstance) => {
     const { message, projectId } = messageDTO as IMessageDTO;
     const messageRes = await discussionService.createMessage(
       message,
-      Date.now(),
       projectId,
-      connections[socket.id].id,
+      CONNECTED_USERS[socket.id].id,
     );
 
     app.io.to(projectId).emit('discussion:external-message', {

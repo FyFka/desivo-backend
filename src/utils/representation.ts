@@ -42,8 +42,19 @@ export const toTaskClient = (taskPresentable: ITask) => {
 };
 
 export const toColumnClient = (columnPresentable: IColumn) => {
-  const { _id, tasks, title } = columnPresentable;
-  return { id: _id, tasks: tasks.map((task) => toTaskClient(task)), title };
+  const { _id, tasks, title, color } = columnPresentable;
+  const tasksObject = tasks.reduce((acc, task) => {
+    acc[task._id.toString()] = toTaskClient(task);
+    return acc;
+  }, {} as { [key: string]: ReturnType<typeof toTaskClient> });
+
+  return {
+    id: _id,
+    color,
+    tasks: tasksObject,
+    order: tasks.map((task) => task._id.toString()),
+    title,
+  };
 };
 
 export const toColumnListClient = (columnsPresentable: IColumn[]) => {

@@ -12,6 +12,32 @@ export interface IColumnsDTO {
   projectId: string;
 }
 
+export interface IColumnDTO {
+  projectId: string;
+  name: string;
+  color: string;
+}
+
+export interface IDeleteColumnDTO {
+  columnId: string;
+}
+
+export interface IDeleteTaskDTO {
+  columnId: string;
+  taskId: string;
+}
+
+export interface ICreateTaskDTO {
+  columnId: string;
+  title: string;
+  description: string;
+}
+
+export interface IZippedProjectDTO {
+  projectId: string;
+  zippedColumns: { columnId: string; order: string[] }[];
+}
+
 export interface ILabel {
   _id: Types.ObjectId;
   color: string;
@@ -28,5 +54,6 @@ export interface ITask {
 export interface IColumn {
   _id: Types.ObjectId;
   title: string;
+  color: string;
   tasks: ITask[];
 }

@@ -1,6 +1,6 @@
-import { connections } from '../constants';
+import { CONNECTED_USERS } from '../shared/constants';
 import { Socket } from 'socket.io';
-import { SocketEventCallback } from '../shared/EventResponse';
+import { SocketEventCallback } from '../shared/IEventResponse';
 
 export const handledEvents: { evt: string; callback: SocketEventCallback }[] =
   [];
@@ -8,7 +8,7 @@ export const handledEvents: { evt: string; callback: SocketEventCallback }[] =
 export const registerEvents = (socket: Socket) => {
   handledEvents.forEach((hv) => {
     socket.on(hv.evt, async (args) => {
-      if (!connections[socket.id] && hv.evt !== 'connection:register') {
+      if (!CONNECTED_USERS[socket.id] && hv.evt !== 'connection:register') {
         socket.emit('connection:error', {
           message: 'connection is not registered',
         });

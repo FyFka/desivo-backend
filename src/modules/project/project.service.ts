@@ -2,7 +2,7 @@ import { Project } from '../../models';
 import tasksService from '../tasks/tasks.service';
 
 const createProject = async (name: string, userId: string, image?: string) => {
-  const column = await tasksService.createColumn('Example column');
+  const column = await tasksService.createColumn('Example column', '#e6e6e6');
   const project = new Project({
     name,
     image,
@@ -21,8 +21,8 @@ const findAllByUserId = async (userId: string) => {
 
 const joinById = async (projectId: string, userId: string) => {
   const project = await Project.findById(projectId);
-  if (!project || project.users.includes(userId as any)) return null;
-  project.users.push(userId as any);
+  if (!project || (project.users as string[]).includes(userId)) return null;
+  (project.users as string[]).push(userId);
   await project.save();
   return project;
 };

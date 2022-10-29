@@ -10,12 +10,14 @@ import authMiddleware from './middlewares/auth.middleware';
 import socketDecorator from 'fastify-socket.io';
 import discussionController from './modules/discussion/discussion.controller';
 import { registerEvents, handledEvents } from './utils/socket';
-import { SocketEventCallback } from './shared/EventResponse';
+import { SocketEventCallback } from './shared/IEventResponse';
 import tasksController from './modules/tasks/tasks.controller';
+import connectionController from './modules/connection/connection.controller';
 
 const app: FastifyInstance = fastify();
 
 const registerModules = () => {
+  app.register(connectionController);
   app.register(authController);
   app.register(appController);
   app.register(projectController);
@@ -53,9 +55,7 @@ const bootstrap = async () => {
     app.listen({ port: configuration.setup.port, host: '127.0.0.1' }, (err) => {
       if (err) throw err;
       const info = app.server.address();
-      console.log(
-        `server listening on http://${info['address']}:${info['port']}`,
-      );
+      console.log(`Listening on http://${info['address']}:${info['port']}`);
     });
   } catch (err) {
     app.log.error(err);

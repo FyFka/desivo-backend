@@ -5,7 +5,6 @@ import { compareSync } from 'bcryptjs';
 import authService from './auth.service';
 import { toUserClient } from '../../utils/representation';
 import { IUser } from '../user/user.interface';
-import { connections } from '../../constants';
 import { IAuthDTO, ISignupDTO, IValidateDTO } from './auth.interface';
 
 export default async (app: FastifyInstance) => {
@@ -51,19 +50,6 @@ export default async (app: FastifyInstance) => {
       return { message: 'incorrect token' };
     } catch (err) {
       return { message: err.message };
-    }
-  });
-
-  app.event('connection:register', (tokenDTO, socket) => {
-    const user = authService.parseToken(tokenDTO as string);
-    if (user) {
-      connections[socket.id] = user;
-    }
-  });
-
-  app.event('disconnect', (_, socket) => {
-    if (connections[socket.id]) {
-      delete connections[socket.id];
     }
   });
 };
