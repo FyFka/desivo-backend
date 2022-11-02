@@ -1,27 +1,40 @@
-import { IUser } from './user.interface';
-import { User } from '../../models';
-import { hashSync } from 'bcryptjs';
-import roleService from '../role/role.service';
-import { configuration } from '../../config/configuration';
+import { Role, User } from '../../models';
+import { IUserRaw } from '../../models/models.interface';
 
-const createUser = async (userDto: Omit<IUser, 'avatar' | '_id'>) => {
-  const { password, ...rest } = userDto;
-  const userRole = await roleService.findRoleByName(configuration.default.role);
-  if (!userRole) throw new Error("Role doesn't exists");
-  const foundUser = await findUserByKey('username', userDto.username);
-  if (foundUser) throw new Error('User is already exists');
-  const user = new User({
-    password: hashSync(password),
-    roles: [userRole.value],
-    ...rest,
-  });
-  await user.save();
+const getRoleByName = async (name: string) => {
+  const role = await Role.findOne({ value: name });
+  return role;
+};
+
+const getUserByUsername = async (username: string) => {
+  const user = await User.findOne({ username });
   return user;
 };
 
-const findUserByKey = async (key: string, value: string) => {
-  const user = await User.findOne({ [key]: value }).exec();
+const getUserById = async (userId: string) => {
+  const user = await User.findById<IUserRaw>(userId);
   return user;
 };
 
-export default { createUser, findUserByKey };
+const changeAvatar = async (userId: string, avatar: string) => {
+  await User.findByIdAndUpdate(userId, { avatar });
+  return avatar;
+};
+
+const changeProfile = async (
+  userId: string,
+  name: string,
+  secondName: string,
+  username: string,
+) => {
+  await User.findByIdAndUpdate(userId, { name, secondName, username });
+  return { name, secondName, username };
+};
+
+export default {
+  getRoleByName,
+  getUserByUsername,
+  changeAvatar,
+  changeProfile,
+  getUserById,
+};

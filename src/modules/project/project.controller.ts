@@ -1,14 +1,8 @@
 import { FastifyInstance } from 'fastify';
+import { IProjectRaw } from '../../models/models.interface';
 import { uploadImage } from '../../utils/cloudinary';
-import {
-  toProjectClient,
-  toProjectListClient,
-} from '../../utils/representation';
-import {
-  ICreateProjectDTO,
-  IJoinProjectDTO,
-  IProject,
-} from './project.interface';
+import { toProjectListView, toProjectView } from '../../utils/representation';
+import { ICreateProjectDTO, IJoinProjectDTO } from './project.dto';
 import projectService from './project.service';
 import projectValidate from './project.validate';
 
@@ -32,7 +26,9 @@ export default async (app: FastifyInstance) => {
         projectUrl,
       );
 
-      return { value: toProjectClient(project as IProject) };
+      return {
+        value: toProjectView(project as IProjectRaw<string[], string[]>),
+      };
     } catch (err) {
       return { message: err.message };
     }
@@ -41,8 +37,11 @@ export default async (app: FastifyInstance) => {
   app.get('/project/my-all', async (req) => {
     try {
       const { user } = req.raw;
-      const projects = await projectService.findAllByUserId(user.id);
-      return { value: toProjectListClient(projects as IProject[]) };
+      const projects = await projectService.getAllByUserId(user.id);
+
+      return {
+        value: toProjectListView(projects as IProjectRaw<string[], string[]>[]),
+      };
     } catch (err) {
       return { message: err.message };
     }
@@ -54,7 +53,11 @@ export default async (app: FastifyInstance) => {
       const { user } = req.raw;
       const joinedProject = await projectService.joinById(projectId, user.id);
       if (joinedProject) {
-        return { value: toProjectClient(joinedProject as IProject) };
+        return {
+          value: toProjectView(
+            joinedProject as IProjectRaw<string[], string[]>,
+          ),
+        };
       } else {
         return {
           message: "You are already in this project or project doesn't exists",

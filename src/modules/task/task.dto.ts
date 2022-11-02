@@ -1,5 +1,3 @@
-import { Types } from 'mongoose';
-
 export interface ISubscribeDTO {
   projectId: string;
 }
@@ -36,24 +34,4 @@ export interface ICreateTaskDTO {
 export interface IZippedProjectDTO {
   projectId: string;
   zippedColumns: { columnId: string; order: string[] }[];
-}
-
-export interface ILabel {
-  _id: Types.ObjectId;
-  color: string;
-  name: string;
-}
-
-export interface ITask {
-  _id: Types.ObjectId;
-  title: string;
-  description: string;
-  labels: ILabel[];
-}
-
-export interface IColumn {
-  _id: Types.ObjectId;
-  title: string;
-  color: string;
-  tasks: ITask[];
 }

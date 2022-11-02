@@ -11,8 +11,9 @@ import socketDecorator from 'fastify-socket.io';
 import discussionController from './modules/discussion/discussion.controller';
 import { registerEvents, handledEvents } from './utils/socket';
 import { SocketEventCallback } from './shared/IEventResponse';
-import tasksController from './modules/tasks/tasks.controller';
+import taskController from './modules/task/task.controller';
 import connectionController from './modules/connection/connection.controller';
+import userController from './modules/user/user.controller';
 
 const app: FastifyInstance = fastify();
 
@@ -22,13 +23,15 @@ const registerModules = () => {
   app.register(appController);
   app.register(projectController);
   app.register(discussionController);
-  app.register(tasksController);
+  app.register(taskController);
+  app.register(userController);
 };
 
 const registerMiddlewares = async () => {
   app.register(cors, { origin: '*' });
   app.register(socketDecorator, { cors: { origin: '*' } });
   app.use('/project/', authMiddleware);
+  app.use('/user/change/', authMiddleware);
 };
 
 const registerSocketEvents = () => {

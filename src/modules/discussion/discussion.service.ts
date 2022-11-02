@@ -1,6 +1,7 @@
 import { Socket } from 'socket.io';
 import { Message } from '../../models';
-import { IUser } from '../user/user.interface';
+import { IUserRaw } from '../../models/models.interface';
+import { HISTORY_SKIP_COUNT } from '../../shared/constants';
 
 const createMessage = async (
   message: string,
@@ -8,21 +9,23 @@ const createMessage = async (
   user: string,
 ) => {
   const timestamp = Date.now();
-  const newMessage = new Message({ message, project, timestamp, user });
-  await newMessage.save();
-  const messageWithUser = await newMessage.populate<{ user: IUser }>('user');
+  const newMessage = await Message.create({
+    message,
+    project,
+    timestamp,
+    user,
+  });
+  const messageWithUser = await newMessage.populate<{ user: IUserRaw }>('user');
   return messageWithUser;
 };
 
-const getMessages = async (projectId: string, skip: number) => {
-  const messages = await Message.find({ project: projectId })
+const getMessagesHistory = async (projectId: string, skip: number) => {
+  const messagesHistory = await Message.find({ project: projectId })
     .sort({ timestamp: 'desc' })
-    .limit(25)
+    .limit(HISTORY_SKIP_COUNT)
     .skip(skip)
-    .populate<{
-      user: IUser;
-    }>('user');
-  return messages;
+    .populate<{ user: IUserRaw }>('user');
+  return messagesHistory;
 };
 
 const subscribeToDiscussion = (socket: Socket, projectId: string) => {
@@ -35,7 +38,7 @@ const unsubscribeFromDiscussion = (socket: Socket, projectId: string) => {
 
 export default {
   createMessage,
-  getMessages,
+  getMessagesHistory,
   subscribeToDiscussion,
   unsubscribeFromDiscussion,
 };
