@@ -31,9 +31,11 @@ export default async (app: FastifyInstance) => {
       CONNECTED_USERS[socket.id].id,
     );
 
-    app.io.to(projectId).emit('discussion:external-message', {
-      value: toMessageView(newMessage),
-    });
+    app.io
+      .to(discussionService.toDiscussionSubscribers(projectId))
+      .emit('discussion:external-message', {
+        value: toMessageView(newMessage),
+      });
   });
 
   app.event('discussion:get-history', async (paginationDTO) => {

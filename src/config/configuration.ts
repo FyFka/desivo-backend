@@ -21,10 +21,10 @@ export const configuration = Object.freeze({
   default: {
     avatar:
       process.env.DEFAULT_AVATAR ||
-      'https://user-images.githubusercontent.com/76843185/194325153-59248d9e-9826-4252-a0c2-64ed7408f4ee.png',
+      'https://res.cloudinary.com/fyfka/image/upload/v1667408843/task-manager/bceo4lw4vctpurwvyv4r.svg',
     role: process.env.DEFAULT_ROLE || 'USER',
     project:
       process.env.DEFAULT_PROJECT ||
-      'https://user-images.githubusercontent.com/76843185/194325153-59248d9e-9826-4252-a0c2-64ed7408f4ee.png',
+      'https://res.cloudinary.com/fyfka/image/upload/v1667408843/task-manager/bceo4lw4vctpurwvyv4r.svg',
   },
 });

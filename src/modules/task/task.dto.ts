@@ -20,6 +20,20 @@ export interface IDeleteColumnDTO {
   columnId: string;
 }
 
+export interface IUpdateTaskDTO {
+  taskId: string;
+  columnId: string;
+  title: string;
+  description: string;
+}
+
+export interface ICreateLabelDTO {
+  taskId: string;
+  columnId: string;
+  name: string;
+  color: string;
+}
+
 export interface IDeleteTaskDTO {
   columnId: string;
   taskId: string;

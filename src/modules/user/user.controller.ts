@@ -39,8 +39,11 @@ export default async (app: FastifyInstance) => {
       const { user } = req.raw;
       const uploadResult = await uploadImage(avatar);
       if (uploadResult.value) {
-        await userService.changeAvatar(user.id, uploadResult.value);
-        return { value: uploadResult.value };
+        const updatedAvatar = await userService.updateAvatar(
+          user.id,
+          uploadResult.value,
+        );
+        return { value: updatedAvatar };
       }
       return { message: uploadResult.message };
     } catch (err) {
@@ -52,7 +55,7 @@ export default async (app: FastifyInstance) => {
     try {
       const { name, secondName, username } = req.body as IChangeProfileDTO;
       const { user } = req.raw;
-      const newProfile = await userService.changeProfile(
+      const newProfile = await userService.updateProfile(
         user.id,
         name,
         secondName,

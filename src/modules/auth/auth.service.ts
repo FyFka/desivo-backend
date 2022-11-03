@@ -28,7 +28,7 @@ const parseToken = (token: string): ITokenableUser => {
 const userSignup = async (userDto: ISignupDTO) => {
   const { password, ...rest } = userDto;
   const userRole = await userService.getRoleByName(configuration.default.role);
-  if (!userRole) throw new Error("Role doesn't exists");
+  if (!userRole) throw new Error("Default role doesn't exists");
   const foundUser = await userService.getUserByUsername(userDto.username);
   if (foundUser) throw new Error('User with this username already exists');
   const user = await User.create({

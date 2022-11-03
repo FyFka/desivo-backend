@@ -2,17 +2,20 @@ import { FastifyInstance } from 'fastify';
 import {
   toColumnListView,
   toColumnWithTasksView,
+  toLabelView,
   toTaskView,
 } from '../../utils/representation';
 
 import {
   IColumnDTO,
   IColumnsDTO,
+  ICreateLabelDTO,
   ICreateTaskDTO,
   IDeleteColumnDTO,
   IDeleteTaskDTO,
   ISubscribeDTO,
   IUnsubscribeDTO,
+  IUpdateTaskDTO,
   IZippedProjectDTO,
 } from './task.dto';
 import taskService from './task.service';
@@ -89,8 +92,37 @@ export default async (app: FastifyInstance) => {
 
     app.io
       .to(taskService.toTaskSubscribers(projectId))
-      .emit('task:tasks-moved', {
+      .emit('task:task-moved', {
         value: newZippedColumns,
+      });
+  });
+
+  app.event('task:create-label', async (createLabelDTO) => {
+    const { taskId, name, color, columnId } = createLabelDTO as ICreateLabelDTO;
+    const projectId = await taskService.getProjectIdByColumnId(columnId);
+    const label = await taskService.createLabel(taskId, name, color);
+
+    app.io
+      .to(taskService.toTaskSubscribers(projectId))
+      .emit('task:label-created', {
+        value: toLabelView(label),
+      });
+  });
+
+  app.event('task:update-task', async (updateTaskDTO) => {
+    const { taskId, title, description, columnId } =
+      updateTaskDTO as IUpdateTaskDTO;
+    const projectId = await taskService.getProjectIdByColumnId(columnId);
+    const updatedTask = await taskService.updateTask(
+      taskId,
+      title,
+      description,
+    );
+
+    app.io
+      .to(taskService.toTaskSubscribers(projectId))
+      .emit('task:task-updated', {
+        value: updatedTask,
       });
   });
 };

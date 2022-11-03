@@ -16,25 +16,39 @@ const getUserById = async (userId: string) => {
   return user;
 };
 
-const changeAvatar = async (userId: string, avatar: string) => {
-  await User.findByIdAndUpdate(userId, { avatar });
-  return avatar;
+const updateAvatar = async (userId: string, avatar: string) => {
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { avatar },
+    { new: true },
+  );
+
+  return updatedUser.avatar;
 };
 
-const changeProfile = async (
+const updateProfile = async (
   userId: string,
   name: string,
   secondName: string,
   username: string,
 ) => {
-  await User.findByIdAndUpdate(userId, { name, secondName, username });
-  return { name, secondName, username };
+  const updatedUser = await User.findByIdAndUpdate(
+    userId,
+    { name, secondName, username },
+    { new: true },
+  );
+
+  return {
+    name: updatedUser.name,
+    secondName: updatedUser.secondName,
+    username: updatedUser.username,
+  };
 };
 
 export default {
   getRoleByName,
   getUserByUsername,
-  changeAvatar,
-  changeProfile,
+  updateAvatar,
+  updateProfile,
   getUserById,
 };

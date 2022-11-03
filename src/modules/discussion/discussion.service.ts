@@ -3,6 +3,18 @@ import { Message } from '../../models';
 import { IUserRaw } from '../../models/models.interface';
 import { HISTORY_SKIP_COUNT } from '../../shared/constants';
 
+const toDiscussionSubscribers = (projectId: string) => {
+  return `${projectId}/discussion`;
+};
+
+const subscribeToDiscussion = (socket: Socket, projectId: string) => {
+  socket.join(`${projectId}/discussion`);
+};
+
+const unsubscribeFromDiscussion = (socket: Socket, projectId: string) => {
+  socket.leave(`${projectId}/discussion`);
+};
+
 const createMessage = async (
   message: string,
   project: string,
@@ -28,17 +40,10 @@ const getMessagesHistory = async (projectId: string, skip: number) => {
   return messagesHistory;
 };
 
-const subscribeToDiscussion = (socket: Socket, projectId: string) => {
-  socket.join(projectId);
-};
-
-const unsubscribeFromDiscussion = (socket: Socket, projectId: string) => {
-  socket.leave(projectId);
-};
-
 export default {
   createMessage,
   getMessagesHistory,
   subscribeToDiscussion,
   unsubscribeFromDiscussion,
+  toDiscussionSubscribers,
 };
