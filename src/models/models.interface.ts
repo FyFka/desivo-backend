@@ -37,19 +37,10 @@ export interface ILabelRaw extends IMongo {
   name: string;
 }
 
-export interface ICommentRaw<U = IUserRaw | string> extends IMongo {
-  text: string;
-  user: U;
-}
-
-export interface ITaskRaw<
-  L = ILabelRaw[] | string[],
-  C = ICommentRaw[] | string[],
-> extends IMongo {
+export interface ITaskRaw<L = ILabelRaw[] | string[]> extends IMongo {
   title: string;
   description: string;
   labels: L;
-  comments: C;
 }
 
 export interface IColumnRaw<T = ITaskRaw[] | string[]> extends IMongo {

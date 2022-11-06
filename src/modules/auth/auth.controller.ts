@@ -4,7 +4,7 @@ import validate from './auth.validate';
 import { compareSync } from 'bcryptjs';
 import authService from './auth.service';
 import { IAuthDTO, ISignupDTO, IValidateDTO } from './auth.dto';
-import { toUserView } from '../../utils/representation';
+import { toUserView } from '../../utils/view';
 
 export default async (app: FastifyInstance) => {
   app.post('/auth', validate.auth, async (req) => {
@@ -13,10 +13,8 @@ export default async (app: FastifyInstance) => {
       const user = await userService.getUserByUsername(username);
       if (user && compareSync(password, user.password)) {
         const token = authService.generateToken(user._id, user.roles);
-
         return { value: { user: toUserView(user), token } };
       }
-
       return { message: 'Incorrect username or password' };
     } catch (err) {
       return { message: err.message };
@@ -43,7 +41,7 @@ export default async (app: FastifyInstance) => {
         const user = await userService.getUserById(parsedToken.id);
         return { value: toUserView(user) };
       }
-      return { message: 'incorrect token' };
+      return { message: 'Token has expired' };
     } catch (err) {
       return { message: err.message };
     }

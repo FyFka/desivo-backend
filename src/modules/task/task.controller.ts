@@ -4,7 +4,7 @@ import {
   toColumnWithTasksView,
   toLabelView,
   toTaskView,
-} from '../../utils/representation';
+} from '../../utils/view';
 
 import {
   IColumnDTO,
@@ -105,7 +105,7 @@ export default async (app: FastifyInstance) => {
     app.io
       .to(taskService.toTaskSubscribers(projectId))
       .emit('task:label-created', {
-        value: toLabelView(label),
+        value: { label: toLabelView(label), taskId },
       });
   });
 

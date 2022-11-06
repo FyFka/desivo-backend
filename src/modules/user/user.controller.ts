@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { uploadImage } from '../../utils/cloudinary';
-import { toProjectListView, toUserView } from '../../utils/representation';
+import { toProjectListView, toUserView } from '../../utils/view';
 import projectService from '../project/project.service';
 import { IChangeAvatarDTO, IChangeProfileDTO, IUsernameDTO } from './user.dto';
 import userService from './user.service';

@@ -1,5 +1,5 @@
 import { Socket } from 'socket.io';
-import { Column, Comment, Label, Project, Task } from '../../models';
+import { Column, Label, Project, Task } from '../../models';
 import { IColumnRaw, ILabelRaw, ITaskRaw } from '../../models/models.interface';
 
 const subscribeToTasks = (socket: Socket, projectId: string) => {
@@ -105,7 +105,6 @@ const deleteTask = async (taskId: string) => {
     );
     await column.save();
   }
-  await Comment.deleteMany({ _id: { $in: deletedTask.comments } });
   await Label.deleteMany({ _id: { $in: deletedTask.labels } });
 };
 

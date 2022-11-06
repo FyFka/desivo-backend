@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify';
 import { IProjectRaw } from '../../models/models.interface';
 import { uploadImage } from '../../utils/cloudinary';
-import { toProjectListView, toProjectView } from '../../utils/representation';
+import { toProjectListView, toProjectView } from '../../utils/view';
 import { ICreateProjectDTO, IJoinProjectDTO } from './project.dto';
 import projectService from './project.service';
 import projectValidate from './project.validate';
@@ -58,11 +58,10 @@ export default async (app: FastifyInstance) => {
             joinedProject as IProjectRaw<string[], string[]>,
           ),
         };
-      } else {
-        return {
-          message: "You are already in this project or project doesn't exists",
-        };
       }
+      return {
+        message: "You are already in this project or project doesn't exists",
+      };
     } catch (err) {
       return { message: err.message };
     }

@@ -1,9 +1,6 @@
 import { FastifyInstance } from 'fastify';
 import { CONNECTED_USERS } from '../../shared/constants';
-import {
-  toMessagesHistoryView,
-  toMessageView,
-} from '../../utils/representation';
+import { toMessagesHistoryView, toMessageView } from '../../utils/view';
 import {
   IMessageDTO,
   IPaginationDTO,
