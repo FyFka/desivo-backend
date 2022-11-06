@@ -55,7 +55,7 @@ const bootstrap = async () => {
     registerModules();
     registerSocketEvents();
 
-    app.listen({ port: configuration.setup.port, host: '127.0.0.1' }, (err) => {
+    app.listen({ port: configuration.setup.port, host: '0.0.0.0' }, (err) => {
       if (err) throw err;
       const info = app.server.address();
       console.log(`Listening on http://${info['address']}:${info['port']}`);

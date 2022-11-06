@@ -3,7 +3,7 @@ dotenv.config();
 
 export const configuration = Object.freeze({
   setup: {
-    port: Number(process.env.SETUP_PORT) || 3000,
+    port: Number(process.env.PORT) || 3000,
   },
   database: {
     uri: process.env.DATABASE_URI || 'empty',
